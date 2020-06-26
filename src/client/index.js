@@ -1,7 +1,5 @@
 import './styles/style.scss';
 
-alert("New project");
-
 // Main Function
 const getTravelInfo = (city) => {
     // const city = document.getElementById('city').value;
