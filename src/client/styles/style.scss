@@ -3,144 +3,136 @@ body{
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-#app{
+.app{
     display: grid;
-    grid-auto-rows: minmax(150px, auto);
-    /* grid-template-columns:  */
-    height:100vh;
-    background: #556879;
-    color: #DAB5BC;
+    grid-template-rows: 25% auto auto;
+    grid-template-areas: 
+    "header"
+    "input"
+    "result";
+    height: 100vh;
+    background: #B3E0F2;
+    color: #F26716;
     justify-content: center;
     grid-gap: 1em;
     font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
+    font-family: 'Lucida Sans', sans-serif;
 
-.modal{
-    display: none; 
-    position: relative;
-    z-index: 1; 
-    margin: auto;
-    width: 80%; 
-    padding: 20px;
-    background-color: #3b4a6b; 
-    border: 1px solid #F0E4E4;
-    color: #F0E4E4;
-}
-
-.modal-content{
-    border: 4px solid #990003; 
-    padding: 20px;
-}
-
-.close{
-    color: #F0E4E4;
-    position: absolute;
-    top: -10px;
-    right: 3px;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.entry{
-    background: rgba(59, 74, 107, .4);
-    padding-left: 10px;
-    margin-bottom: 40px;
-    border: 1px solid #84B6BD;
-}
-
-.feel{
-    display: flex;
-    flex-direction: column;
-}
-
-.headline {
-    font-size: 40px;
-}
-
-.title{
-    font-size: 28px;
-}
-
-/*  Basic Styling To Override Default For Basic HTML Elements */
-label{
-    display:block;
-    font-size: 27px;
-}
-
-input{
-    display:block;
-    height: 60px;
-    width: 320px;
-    background:#84B6BD;
-    color: #556879;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
-    padding-left: 10px;
-}
-
-button{
-    width: 400px;
-    height: 100px;
-    background: #3b4a6b;
-    color: #DAB5BC;
-    font-size: 26px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
-    box-shadow: 2px 4px 5px #444;
-    margin-top: 20px;
-
-    &:hover {
-        background-color: #2f3d5c;
+    header {
+        grid-area: header;
     }
 
-    &:active {
-        background-color: #DAB5BC;
-        color: #2f3d5c
+    .headline {
+        font-size: 40px;
+        margin: auto;
+    }
+
+    main {
+        .inputSection{
+            grid-area: input;
+        }
+        
+        label{
+            display:block;
+            font-size: 27px;
+            margin-bottom: 5px;
+        }
+
+        input{
+            display:block;
+            height: 60px;
+            width: 320px;
+            background:#D3D936;
+            border-radius: 25px;
+            color: #556879;
+            font-size: 20px;
+            border: none;
+            padding: 0 10px;
+            margin-bottom: 10px;
+
+            &::placeholder {  
+                color: #556879; 
+            }
+
+            &:hover {
+                background-color: #556879;
+                color: #D3D936;
+
+                &::placeholder {  
+                    color: #D3D936; 
+                }
+            }
+
+            &:focus {
+                outline: none;
+                background-color: #556879;
+                color: #D3D936; 
+            }
+        }
+
+        button{
+            width: 300px;
+            height: 100px;
+            background: #F26716;
+            border-radius: 25px;
+            color: #F2D230;
+            font-size: 26px;
+            border: none;
+            box-shadow: 2px 4px 5px #444;
+            margin-top: 20px;
+        
+            &:hover {
+                background-color: #F2A71B;
+                color: #556879;
+            }
+        
+            &:visited {
+                background-color: #F2A71B;
+                color: #556879;
+            }
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .resultSection{
+            grid-area: result;
+            margin-top: 20px;
+        }
+
+        .result{
+            display: none;
+
+            .title{
+                font-size: 28px;
+            }
+
+            #image{
+                padding-left: 50px;
+            }
+        }
+
+        .error{
+            display: none; 
+            position: relative;
+            z-index: 1; 
+            margin: auto;
+            width: 80%; 
+            padding: 20px;
+            background-color: #3b4a6b; 
+            border: 1px solid #F0E4E4;
+            color: #F0E4E4;
+        }
+        
+        .error-content{
+            border: 4px solid #990003; 
+            padding: 20px;
+        }
     }
 }
 
-h1{
-    font-size: 36px;
+footer {
+    text-align: center;
+    color: #F26716;
 }
-
-textarea{
-    background:#84B6BD;
-    color: #556879;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-    padding-left: 10px;
-}
-/* Reset style for HTML element on active to have no border*/
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-    outline: none;
-}
-/* Style for Placeholder Text*/
-::placeholder { /* Firefox, Chrome, Opera */ 
-    color: #556879; 
-    font-family: 'Oswald', sans-serif;
-
-} 
-  
-:-ms-input-placeholder { /* Internet Explorer 10-11 */ 
-    color: #556879; 
-    font-family: 'Oswald', sans-serif;
-
-} 
-  
-::-ms-input-placeholder { /* Microsoft Edge */ 
-    color: #556879; 
-    font-family: 'Oswald', sans-serif;
-
-} 

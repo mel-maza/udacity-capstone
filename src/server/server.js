@@ -7,8 +7,6 @@ const fetch = require('node-fetch');
 
 dotenv.config();
 
-// TODO: Hier evtl. Apis aufsetzen
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -35,7 +33,7 @@ app.post('/travelInfo', (req, res) => {
         date: req.body.date,
         countdown
     }
-    getLocationInfoForCity(process.env.GEO_URL + city + '&maxRows=1&username=' + process.env.GEO_USERNAME)
+    getLocationInfoForCity()
         .then(response => {
             console.log(response); 
             travelData = {
@@ -53,7 +51,14 @@ app.post('/travelInfo', (req, res) => {
                             description: weatherResponse.weather.description
                         }
                     };
-                    res.send(travelData);
+                    getImageForLocation(travelData.city)
+                        .then((imageResponse) => {
+                            travelData = {
+                                ...travelData,
+                                image: imageResponse
+                            }
+                            res.send(travelData);
+                        })
                 })
         });
 })
@@ -65,6 +70,7 @@ const getCountdown = (dateString) => {
     const dif = travelDate.getTime() - Date.now();
     return Math.round(dif / (1000*60*60*24));
 }
+
 const getWeatherforTravelDate = (weatherData) => {
     let result = weatherData.data[0];
     weatherData.data.map((currentWeatherData) => {
@@ -76,7 +82,8 @@ const getWeatherforTravelDate = (weatherData) => {
 }
 
 // Fetch Functions
-const getLocationInfoForCity = async (url = '') => {
+const getLocationInfoForCity = async () => {
+    const url = `${process.env.GEO_URL}${travelData.city}&maxRows=1&username=${process.env.GEO_USERNAME}`;
     const response = await fetch(url);
     try {
         const locationData = await response.json();
@@ -103,6 +110,22 @@ const getWeatherDataForLocation = async () => {
         return weatherData.data[0];
     } catch (error) {
         console.log('An error occurred while calling the weatherbit-API: ', error);
+        return error;
+    }
+}
+
+const getImageForLocation = async (searchParameter) => {
+    console.log('getting image for:', searchParameter);
+    const url = `${process.env.PIXABAY_URL}&key=${process.env.PIXABAY_API_KEY}&q=${searchParameter.replace(' ', '+')}`;
+    const response = await fetch(url);
+    try {
+        const imageData = await response.json();
+        if (imageData.hits && imageData.hits.length > 0) {
+            return imageData.hits[0].webformatURL;
+        }
+        return getImageForLocation(travelData.country);
+    } catch (error) {
+        console.log('An error occurred while calling the pixabay-API: ', error);
         throw error;
     }
 }

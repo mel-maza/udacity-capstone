@@ -10,17 +10,42 @@
                 Capstone - Traveling App
             </header>
             <main>
-                <div class ="city">
-                    <label for="city">Enter city here</label>
-                    <input type="text" id="city" placeholder="enter traveling location here">
+                <div class="inputSection">
+                    <div class ="city">
+                        <label for="city">Enter city here</label>
+                        <input type="text" id="city" placeholder="enter traveling location here">
+                    </div>
+                    <div class ="date">
+                        <label for="date">Enter traveling date here</label>
+                        <input type="date" id="date" >
+                    </div>
+                    <button id="travelInfoButton" type="submit"> Let's get ready to travel </button>
                 </div>
-                <div class ="date">
-                    <label for="date">Enter traveling date here</label>
-                    <input type="date" id="date" >
+                <div class="resultSection">
+                    <div class ="result" id="travelInfo">
+                        <div class = "title">Here is your travel info</div>
+                          <div class = "travelInfo">
+                            <div id = "countdownInfo">
+                                <p>Your trip will start in <span id="countdown"></span> days</p>
+                            </div> 
+                            <div id = "weather">
+                                <p>The temperature is at <span id="temp"></span> °C and the weather is described as <span id="description"></span> </p>
+                            </div>
+                            <div id = "image">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="error" id="error">
+                        <div class="error-content">
+                          <p>!Something went wrong!</p>
+                          <p>Details:</p>
+                          <p id="errorMessage"></p>
+                        </div>
+                    </div>
                 </div>
-                <button id="travelInfoButton" type="submit"> Let's get ready to travel </button>
             </main>
-            <footer>Footer</footer>
+            <footer>Copyright by ME</footer>
         </div>
     </body>
 </html>
