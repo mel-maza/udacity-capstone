@@ -97,6 +97,15 @@ button{
     border: none;
     box-shadow: 2px 4px 5px #444;
     margin-top: 20px;
+
+    &:hover {
+        background-color: #2f3d5c;
+    }
+
+    &:active {
+        background-color: #DAB5BC;
+        color: #2f3d5c
+    }
 }
 
 h1{

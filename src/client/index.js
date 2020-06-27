@@ -1,13 +1,16 @@
 import './styles/style.scss';
 
 // Main Function
-const getTravelInfo = (city) => {
-    // const city = document.getElementById('city').value;
+const getTravelInfo = (event) => {
+    event.preventDefault();
+    const city = document.getElementById('city').value;
+    const date = document.getElementById('date').value;
     const data = {
-        city
+        city,
+        date
     };
     postData('http://localhost:3000/travelInfo', data)
-        .then((response) => console.log(response));
+        .then((response) => console.log('There is your travel info: ', response));
 }
 
 // Fetch Functions
@@ -28,4 +31,7 @@ const postData = async (url = '', data = {}) => {
     }
 }
 
-getTravelInfo('Wilhermsdorf');
+// Event Listeners
+const button = document.getElementById('travelInfoButton');
+button.addEventListener('click', (event) => getTravelInfo(event));
+

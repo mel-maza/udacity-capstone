@@ -28,9 +28,12 @@ app.get('/', (req, res) => {res.sendFile('dist/index.html');})
 app.post('/travelInfo', (req, res) => {
     // Get location info from Geonames
     const city = req.body.city;
+    const countdown = getCountdown(req.body.date);
     travelData = {
         ...travelData,
-        city
+        city,
+        date: req.body.date,
+        countdown
     }
     getLocationInfoForCity(process.env.GEO_URL + city + '&maxRows=1&username=' + process.env.GEO_USERNAME)
         .then(response => {
@@ -43,18 +46,34 @@ app.post('/travelInfo', (req, res) => {
             };
             getWeatherDataForLocation()
                 .then((weatherResponse) => {
-                    console.log('weather: ', weatherResponse);
                     travelData = {
                         ...travelData,
                         weather: {
-                            temperature: weatherResponse.data[0].temp,
-                            description: weatherResponse.data[0].weather.description
+                            temperature: weatherResponse.temp,
+                            description: weatherResponse.weather.description
                         }
                     };
                     res.send(travelData);
                 })
         });
 })
+
+// Helper Functions
+const getCountdown = (dateString) => {
+    const splittedDateString = dateString.split('-');
+    const travelDate = new Date(splittedDateString[0], splittedDateString[1] - 1, splittedDateString[2]);
+    const dif = travelDate.getTime() - Date.now();
+    return Math.round(dif / (1000*60*60*24));
+}
+const getWeatherforTravelDate = (weatherData) => {
+    let result = weatherData.data[0];
+    weatherData.data.map((currentWeatherData) => {
+        if (currentWeatherData.valid_date === travelData.date) {
+            result = currentWeatherData; 
+        }
+    })
+    return result;
+}
 
 // Fetch Functions
 const getLocationInfoForCity = async (url = '') => {
@@ -69,12 +88,19 @@ const getLocationInfoForCity = async (url = '') => {
 }
 
 const getWeatherDataForLocation = async () => {
-    // TODO: Hier aufgrund des Datums entscheiden, welche URL aufgerufen werden muss
-    const url = process.env.WEATHERBIT_URL_CURRENT + 'lat=' + travelData.latitude + '&lon=' + travelData.longitude + '&key=' + process.env.WEATHERBIT_API_KEY;
+    // depending on the countdown the current weather or the forecast weather needs to be fetched
+    let weatherbitURL = process.env.WEATHERBIT_URL_CURRENT;
+    if (travelData.countdown > 7) {
+        weatherbitURL = process.env.WEATHERBIT_URL_FORECAST;
+    }
+    const url = `${weatherbitURL}lat=${travelData.latitude}&lon=${travelData.longitude}&key=${process.env.WEATHERBIT_API_KEY}`;
     const response = await fetch(url);
     try {
         const weatherData = await response.json();
-        return weatherData;
+        if (travelData.countdown > 7) {
+            return getWeatherforTravelDate(weatherData);
+        }
+        return weatherData.data[0];
     } catch (error) {
         console.log('An error occurred while calling the weatherbit-API: ', error);
         throw error;
