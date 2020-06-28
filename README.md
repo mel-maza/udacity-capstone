@@ -13,6 +13,9 @@ A new Tab will be opened automatically in the browser at `http://localhost:8080/
 For the production mode run `npm run build-prod`.
 For the tests run `npm run test`.
 
+### APIs
+The basic URLs and the API_KEYs / username for the APIs are in the .env-file and set together in the server.js-file. There is a comment in the server.js-file for each API to see what the whole used URL looks like and how the API_KEY/username is used in this URL.
+
 ## What You're Getting
 ```bash
 ├── README.md - This file.
@@ -22,6 +25,9 @@ For the tests run `npm run test`.
 ├── webpack.prod.js # contains the configuration for the production mode
 ├── .gitignore # contains the files and folders to ignore for git
 ├── .env # contains credentials
+    ├── GEO_USERNAME # the username needed for the geonames-API
+    ├── WEATHERBIT_API_KEY # the API_KEY needed for the weatherbit-API
+    └── PIXABAY_API_KEY # the API_KEY needed for the pixabay-API
 ├── .babelrc # contains th configuration for babel
 ├── dist # contains the built files
     ├── index.html # the built html file

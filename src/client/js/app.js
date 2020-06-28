@@ -5,13 +5,18 @@ locationImage.height = 150;
 // Main Function
 export const getTravelInfo = (event) => {
     event.preventDefault();
+    showErrorMessage('', "none");
     const city = document.getElementById('city').value;
     const date = document.getElementById('date').value;
     const data = {
         city,
         date
     };
-    postData('http://localhost:3000/travelInfo', data)
+
+    if (!Client.isValidCity(city)) {
+        showErrorMessage('Please enter a valid city name.', "block")
+    } else {
+        postData('http://localhost:3000/travelInfo', data)
         .then((response) => {
             console.log('There is your travel info: ', response);
             if (response.error) {
@@ -20,7 +25,8 @@ export const getTravelInfo = (event) => {
                 showResult(response);
             }
         })
-        .catch (error => showErrorMessage(error));
+        .catch (error => showErrorMessage(error, "block"));
+    }
 }
 
 export const toggleTravelInfo = (toggle) => {
@@ -38,12 +44,10 @@ const showResult = (response) => {
     toggleTravelInfo("block");
 }
 
-const showErrorMessage = (error) => {
-    const modal = document.getElementById('errorModal');
+const showErrorMessage = (error, display) => {
+    const errorElement = document.getElementById('error');
     document.getElementById('errorMessage').innerHTML = error;
-    modal.style.display = "block";
-    document.getElementById('closeModal').addEventListener('click', () => modal.style.display = 'none');
-    window.addEventListener('click', (event) => {if (event.target !== modal) {modal.style.display = 'none';}});
+    errorElement.style.display = display;
 }
 
 // Fetch Functions
